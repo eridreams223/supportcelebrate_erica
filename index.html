@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Celebrate Erica 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #f4b8c1;
+    --rose: #e8768a;
+    --sage: #a8c5a0;
+    --mint: #c9e8d1;
+    --butter: #f7e9a0;
+    --peach: #fcd5b0;
+    --cream: #fdf6f0;
+    --lilac: #d5c4e8;
+    --lavender: #ede4f7;
+    --brown: #5c3d2e;
+    --text: #3a2a20;
+    --muted: #7a6560;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  /* MUSIC */
+  #music-bar {
+    position: fixed; bottom: 20px; right: 20px; z-index: 999;
+    display: flex; align-items: center; gap: 10px;
+    background: white; border: 2px solid var(--blush); border-radius: 50px;
+    padding: 10px 18px; box-shadow: 0 4px 20px rgba(232,118,138,0.2);
+    transition: all 0.3s ease;
+  }
+  #music-btn {
+    background: var(--rose); border: none; border-radius: 50%;
+    width: 36px; height: 36px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: white; transition: all 0.2s; flex-shrink: 0;
+  }
+  #music-btn:hover { background: #d45e72; transform: scale(1.05); }
+  .music-info { display: flex; flex-direction: column; line-height: 1.2; }
+  .music-title { font-size: 11px; font-weight: 500; color: var(--text); white-space: nowrap; }
+  .music-artist { font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .music-wave { display: flex; align-items: center; gap: 2px; height: 16px; }
+  .music-wave span {
+    display: block; width: 3px; background: var(--rose); border-radius: 2px;
+    animation: wave 1s ease-in-out infinite; opacity: 0.35;
+  }
+  .music-wave.playing span { opacity: 1; }
+  .music-wave span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .music-wave span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+  .music-wave span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
+  .music-wave span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+  .music-wave span:nth-child(5) { height: 5px; animation-delay: 0.25s; }
+  @keyframes wave { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(0.4)} }
+
+  /* PETALS */
+  .petal { position: fixed; pointer-events: none; z-index: 0; animation: fall linear infinite; opacity: 0.6; }
+  @keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:.7} 100%{transform:translateY(110vh) rotate(360deg);opacity:0} }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 60px 24px;
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(201,232,209,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(213,196,232,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 60% 10%, rgba(247,233,160,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 70%, rgba(201,232,209,0.25) 0%, transparent 45%),
+      var(--cream);
+  }
+  .hero-tag {
+    display: inline-block; background: linear-gradient(135deg, var(--blush), var(--lilac));
+    color: var(--brown); font-size: 13px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 6px 20px; border-radius: 50px; margin-bottom: 28px;
+    position: relative; z-index: 1; animation: fadeUp 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 7vw, 5.5rem);
+    line-height: 1.1; color: var(--brown); margin-bottom: 12px;
+    position: relative; z-index: 1; animation: fadeUp 0.9s ease 0.1s both;
+  }
+  .hero h1 em { font-style: italic; color: var(--rose); }
+  .hero-sub {
+    font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: #6a9e7f; margin-bottom: 32px; position: relative; z-index: 1;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .hero-intro {
+    max-width: 600px; font-size: 1.05rem; line-height: 1.75; color: var(--muted);
+    position: relative; z-index: 1; animation: fadeUp 1s ease 0.3s both;
+  }
+  .scroll-hint {
+    margin-top: 48px; position: relative; z-index: 1; animation: fadeUp 1s ease 0.5s both;
+    color: var(--blush); font-size: 13px; letter-spacing: 0.1em;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-arrow { animation: bounce 1.5s ease-in-out infinite; font-size: 20px; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* SECTIONS */
+  .section { max-width: 860px; margin: 0 auto; padding: 80px 24px; }
+  .chapter-label { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rose); margin-bottom: 10px; }
+  .chapter-title { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem,4vw,2.5rem); color: var(--brown); margin-bottom: 24px; line-height: 1.2; }
+
+  /* GRAD */
+  .grad-section {
+    background:
+      radial-gradient(ellipse at 90% 10%, rgba(247,233,160,0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 90%, rgba(201,232,209,0.3) 0%, transparent 50%), white;
+    border-radius: 32px; padding: 64px 48px; position: relative;
+    overflow: hidden; box-shadow: 0 8px 48px rgba(92,61,46,0.06);
+  }
+  .grad-section::after { content:'🎓'; position:absolute; right:32px; top:32px; font-size:48px; opacity:.12; }
+  .grad-body { font-size: 1.05rem; line-height: 1.85; color: var(--text); max-width: 680px; }
+  .grad-body p { margin-bottom: 16px; }
+  .distinction-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--butter), var(--peach));
+    border-radius: 12px; padding: 12px 20px; margin: 20px 0;
+    font-size: 0.9rem; font-weight: 500; color: var(--brown);
+    border: 1px solid rgba(252,213,176,0.6);
+  }
+  .photo-strip { display: flex; gap: 16px; overflow-x: auto; padding: 8px 0 16px; scrollbar-width: thin; scrollbar-color: var(--blush) transparent; margin-top: 32px; }
+  .photo-frame {
+    flex-shrink: 0; width: 180px; height: 220px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--lavender), var(--mint));
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 36px; border: 2px solid rgba(255,255,255,0.8);
+    box-shadow: 0 4px 20px rgba(92,61,46,0.08); position: relative; overflow: hidden;
+  }
+
+  /* DIVIDER */
+  .petal-divider { text-align: center; padding: 16px; font-size: 20px; letter-spacing: 8px; opacity: 0.5; }
+
+  /* RECOVERY */
+  .recovery-section {
+    background:
+      radial-gradient(ellipse at 10% 20%, rgba(213,196,232,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(244,184,193,0.2) 0%, transparent 50%), white;
+    border-radius: 32px; padding: 64px 48px;
+    box-shadow: 0 8px 48px rgba(92,61,46,0.06); position: relative;
+  }
+  .recovery-section::after { content:'🌿'; position:absolute; right:32px; top:32px; font-size:48px; opacity:.12; }
+  .recovery-body { font-size: 1.05rem; line-height: 1.85; color: var(--text); max-width: 680px; }
+  .recovery-body p { margin-bottom: 16px; }
+  .gratitude-note {
+    background: linear-gradient(135deg, rgba(201,232,209,0.4), rgba(244,184,193,0.3));
+    border-left: 3px solid var(--sage); border-radius: 0 12px 12px 0;
+    padding: 16px 20px; margin: 20px 0; font-style: italic; color: var(--brown); font-size: 0.98rem;
+  }
+
+  /* SUPPORT */
+  .support-section {
+    background: radial-gradient(ellipse at 50% 0%, rgba(244,184,193,0.25) 0%, transparent 60%), var(--cream);
+    padding: 80px 24px;
+  }
+  .support-inner { max-width: 860px; margin: 0 auto; }
+  .support-intro { text-align: center; max-width: 560px; margin: 0 auto 56px; }
+  .support-intro p { font-size: 1.05rem; line-height: 1.75; color: var(--muted); margin-top: 12px; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .card {
+    background: white; border-radius: 24px; padding: 32px 28px;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+    box-shadow: 0 4px 24px rgba(92,61,46,0.07); border: 1.5px solid rgba(244,184,193,0.3);
+    transition: all 0.25s ease; position: relative; overflow: hidden;
+  }
+  .card::before { content:''; position:absolute; top:0;left:0;right:0; height:4px; background:var(--card-accent, var(--blush)); }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(92,61,46,0.12); border-color: rgba(232,118,138,0.3); }
+  .card-icon { font-size: 32px; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--brown); font-weight: 700; }
+  .card-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; flex: 1; }
+  .card-actions { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; margin-top: 4px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px;
+    border-radius: 50px; font-size: 13px; font-weight: 500; text-decoration: none;
+    cursor: pointer; border: none; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--rose), #d45e72); color: white; box-shadow: 0 3px 12px rgba(232,118,138,0.35); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(232,118,138,0.45); }
+  .btn-outline { background: transparent; color: var(--brown); border: 1.5px solid rgba(92,61,46,0.2); }
+  .btn-outline:hover { background: rgba(244,184,193,0.15); border-color: var(--blush); }
+  .copy-row {
+    display: flex; align-items: center; gap: 8px; background: var(--cream);
+    border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--brown); width: 100%; position: relative;
+  }
+  .copy-icon { cursor: pointer; margin-left: auto; font-size: 14px; opacity: 0.5; transition: opacity 0.2s; flex-shrink: 0; }
+  .copy-icon:hover { opacity: 1; }
+  .mail-card {
+    background: linear-gradient(135deg, var(--lavender), var(--mint));
+    border-radius: 24px; padding: 36px 28px; text-align: center;
+    box-shadow: 0 4px 24px rgba(92,61,46,0.07); margin-top: 24px;
+  }
+  .mail-card .big-icon { font-size: 40px; display: block; margin: 0 auto 12px; }
+  .mail-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--brown); margin-bottom: 8px; }
+  .mail-card p { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
+
+  footer { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid rgba(244,184,193,0.3); }
+  footer .heart { color: var(--rose); }
+
+  #toast {
+    position: fixed; bottom: 80px; left: 50%;
+    transform: translateX(-50%) translateY(20px); background: var(--brown); color: white;
+    padding: 10px 20px; border-radius: 50px; font-size: 13px; opacity: 0;
+    transition: all 0.3s; pointer-events: none; z-index: 9999;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  #bank-modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 1000; align-items: center; justify-content: center; padding: 24px;
+  }
+  .modal-inner { background: white; border-radius: 24px; padding: 36px; max-width: 400px; width: 100%; position: relative; }
+
+  @media (max-width: 600px) {
+    .grad-section, .recovery-section { padding: 40px 24px; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="petals"></div>
+
+<div id="music-bar">
+  <button id="music-btn" onclick="toggleMusic()" title="Play music">▶</button>
+  <div class="music-info">
+    <span class="music-title">Open This Wall</span>
+    <span class="music-artist">Berlioz</span>
+  </div>
+  <div class="music-wave" id="wave">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="bank-modal">
+  <div class="modal-inner">
+    <button onclick="document.getElementById('bank-modal').style.display='none'" style="position:absolute;top:16px;right:20px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--muted);">✕</button>
+    <h3 style="font-family:'Playfair Display',serif;color:var(--brown);margin-bottom:16px;">🏦 UK Bank Transfer</h3>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:20px;">Drop me a text or email and I'll send you my sort code & account number directly — I prefer to share those privately!</p>
+    <a class="btn btn-primary" href="mailto:ecmcnealey@gmail.com?subject=UK Bank Transfer details" style="justify-content:center;">📧 Message Me</a>
+  </div>
+</div>
+
+<audio id="bg-audio" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">✨ A little life update ✨</div>
+  <h1>Celebrate <em>Erica</em></h1>
+  <p class="hero-sub">Graduation · New Home · Recovery Journey</p>
+  <p class="hero-intro">Hi lovelies 💛 Some big milestones, some unexpected challenges, and so much gratitude. Here's what's been happening in my world — and how you can be part of this season with me.</p>
+  <div class="scroll-hint">
+    <span>Scroll to read the update</span>
+    <span class="scroll-arrow">↓</span>
+  </div>
+</section>
+
+<!-- GRADUATION -->
+<div class="section">
+  <div class="grad-section">
+    <p class="chapter-label">Chapter One</p>
+    <h2 class="chapter-title">The Degree & the Dream 🎓</h2>
+    <div class="grad-body">
+      <p>On the 25th of March, I received my <strong>second Master's degree</strong> — a Master of Science in Reproductive and Sexual Health Research, with Merit, from the London School of Hygiene & Tropical Medicine.</p>
+      <p>It has been a dream of mine for nearly a decade to earn a public health degree. I finally did it.</p>
+      <div class="distinction-badge">⭐ Special note: I received a distinction on my summer project! The manuscript is now in the final stages for publication!</div>
+      <p>I've said time and time again that my year at LSHTM was life-changing and one of the best years of my life. London has floored me. This decision gifted me in ways I could never have comprehended, and I do not overlook the immense privilege of having experiences that people only dream of.</p>
+      <p>I've come to find London as home for the foreseeable future and moved two weeks ago to a new flat with my dear friend Geneva, who I met in the programme. We are excited for what this new post-grad season holds. The public health world is navigating a complicated moment globally, but we see plenty of opportunity to insert ourselves into the space with our newfound knowledge.</p>
+    </div>
+    <p class="chapter-label" style="margin-top:40px;margin-bottom:16px;">Glimpses into the Year</p>
+    <div class="photo-strip">
+      <div class="photo-frame"><img src="Photo1.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo2.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo3.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo4.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo5.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo6.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo7.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo8.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo9.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo10.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo11.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo12.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo13.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo14.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo15.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo16.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo17.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo18.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo19.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo20.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo21.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo22.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo23.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo24.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo25.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo26.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo27.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo28.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo29.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo30.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo31.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+      <div class="photo-frame"><img src="Photo32.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:18px;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="petal-divider">🌸 🌿 🌼 🌸 🌿</div>
+
+<!-- RECOVERY -->
+<div class="section" style="padding-top:0;">
+  <div class="recovery-section">
+    <p class="chapter-label">Chapter Two</p>
+    <h2 class="chapter-title">An Unexpected Recovery Journey 🌿</h2>
+    <div class="recovery-body">
+      <p>Since December, I've been navigating a challenging respiratory illness and what we now understand to be an underlying asthma exacerbation triggered by my (very sensitive) allergies. It's been a humbling season — everything from walking to commuting flares my symptoms, and I've spent most of my time at home managing this carefully.</p>
+      <p>It's hard to believe that nearly a third of a year has passed and I'm still navigating this. I've had to drop the life I've known (work in some capacity, exercise, travel, hanging with friends, activities) to meet the demands of managing this illness. In spite of this, I've been managing as well as I can, and I am so grateful for my friend Geneva's unwavering in-home support through all of it. I'm also fortunate to have been able to continue to fund my living expenses thus far, but the need for transitioning into work isn't far off. I sincerely believe I will be a more functional version of myself within a few months — but until then, I'm taking it one day at a time.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPORT -->
+<section class="support-section">
+  <div class="support-inner">
+    <div class="support-intro">
+      <p class="chapter-label" style="text-align:center;">Ways to Celebrate & Support</p>
+      <h2 class="chapter-title" style="text-align:center;font-size:clamp(1.7rem,4vw,2.3rem);">Some people have asked how to show up for me 💛</h2>
+      <p>No pressure, no expectations — just love. If you'd like to celebrate this season with me, here are a few ways to do that.</p>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card" style="--card-accent:#f4b8c1;">
+        <div class="card-icon">📦</div>
+        <div class="card-title">Amazon Wishlist</div>
+        <p class="card-desc">Recovery essentials, home comforts, and a few treats. Everything on the list was chosen with care — anything helps!</p>
+        <div class="card-actions">
+          <a class="btn btn-primary" href="https://www.amazon.co.uk/registries/gl/owner-view/35KB0CRIHF768" target="_blank" rel="noopener">🛍️ View My List</a>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:#a8c5a0;">
+        <div class="card-icon">🍱</div>
+        <div class="card-title">Send a Meal</div>
+        <p class="card-desc">I rarely cook, with Geneva covering this need. This would cover days or nights when she is not able to help, or when she simply needs a night off!</p>
+        <div class="card-actions">
+          <a class="btn btn-primary" href="https://deliveroo.co.uk/gift-cards" target="_blank" rel="noopener">🚴 Deliveroo Gift Card</a>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:#d5c4e8;">
+        <div class="card-icon">💌</div>
+        <div class="card-title">Alternative Support</div>
+        <p class="card-desc">Venmo, Cash App, or UK bank transfer — any amount is genuinely meaningful and I don't take it lightly.</p>
+        <div class="card-actions" style="flex-direction:column;">
+          <div class="copy-row">
+            <span>Venmo: <strong>@e_dreamer</strong></span>
+            <span class="copy-icon" onclick="copyText('@e_dreamer', this)" title="Copy">📋</span>
+          </div>
+          <div class="copy-row">
+            <span>Cash App: <strong>$ethedreamer</strong></span>
+            <span class="copy-icon" onclick="copyText('$ethedreamer', this)" title="Copy">📋</span>
+          </div>
+          <button class="btn btn-outline" style="margin-top:4px;" onclick="showBankModal()">🏦 UK Bank Transfer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mail-card" style="margin-top:24px;">
+      <span class="big-icon">✉️</span>
+      <h3>Send Snail Mail</h3>
+      <p>There is something so special about a handwritten note in the post.<br>Email or text me and I'll send you my address.</p>
+      <a class="btn btn-primary" href="mailto:ecmcnealey@gmail.com?subject=I'd love to send you mail!">📬 Get My Address</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--brown);margin-bottom:8px;">Thank you for being in my corner. 🌸</p>
+  <p>Made with <span class="heart">♥</span> and a lot of gratitude · London, 2026</p>
+</footer>
+
+<script>
+  // PETALS
+  const emojis = ['🌸','🌼','🍃','🌷','🌺'];
+  const container = document.getElementById('petals');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 12) + 's';
+    p.style.fontSize = (14 + Math.random() * 14) + 'px';
+    container.appendChild(p);
+  }
+
+  // MUSIC
+  let playing = false;
+  const audio = document.getElementById('bg-audio');
+  function toggleMusic() {
+    const btn = document.getElementById('music-btn');
+    const wave = document.getElementById('wave');
+    if (!playing) {
+      audio.play();
+      btn.textContent = '❚❚';
+      wave.classList.add('playing');
+      playing = true;
+    } else {
+      audio.pause();
+      btn.textContent = '▶';
+      wave.classList.remove('playing');
+      playing = false;
+    }
+  }
+
+  // COPY
+  function copyText(text, el) {
+    navigator.clipboard.writeText(text).then(() => {
+      el.textContent = '✓';
+      showToast('Copied ' + text + ' ✓');
+      setTimeout(() => el.textContent = '📋', 2000);
+    });
+  }
+
+  // TOAST
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // BANK MODAL
+  function showBankModal() {
+    document.getElementById('bank-modal').style.display = 'flex';
+  }
+  document.getElementById('bank-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
+  // SCROLL FADE
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.grad-section, .recovery-section, .card, .mail-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
